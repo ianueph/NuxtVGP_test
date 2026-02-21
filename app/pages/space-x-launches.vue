@@ -57,6 +57,22 @@
                     </td>
                 </tr>
             </template>
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td>{{ item.mission_name }}</td>
+                    <td>{{ item.launch_date_local }}</td>
+                    <td>{{ 
+                        item.launch_site?.site_name ??
+                        item.launch_site?.site_id ??
+                        "N/A"
+                    }}</td>
+                    <td>
+                        <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
+                            {{ item.rocket.rocket_name }}
+                        </nuxt-link>
+                    </td>
+                </tr>
+            </template>
         </v-data-table>
     </v-container>
 </template>
@@ -87,6 +103,9 @@ const query = gql`
             }
             rocket {
                 rocket_name
+                rocket {
+                    id
+                }
             }
             details
 		}

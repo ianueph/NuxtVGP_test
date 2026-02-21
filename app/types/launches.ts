@@ -9,6 +9,9 @@ export interface Launch {
         }
         rocket: {
             rocket_name: string
+            rocket: {
+                id: string
+            }
         }
         details: string   
 	}

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { CardEnums } from '~/types/cards';
+import { CardEnums } from '~/types/cards';
 
-defineProps<{
+const props = defineProps<{
     title: string,
     description: string,
     type: CardEnums,
@@ -20,6 +20,7 @@ const reveal = ref(false)
             class="mx-auto d-flex flex-column"
             max-width="344"
             height="16rem"
+            elevation="16"
         >
             <v-card-text class="flex-grow-1">
             <p class="text-h4 font-weight-black">{{title}}</p>

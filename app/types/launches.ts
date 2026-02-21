@@ -1,0 +1,14 @@
+export interface Launch {
+		id: string
+        mission_name: string
+        launch_date_local: Date
+        launch_site: {
+            site_name_long: string  
+            site_name: string
+            site_id: string
+        }
+        rocket: {
+            rocket_name: string
+        }
+        details: string   
+	}

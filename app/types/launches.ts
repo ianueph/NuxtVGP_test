@@ -20,3 +20,8 @@ export enum LaunchOrder {
     Ascending = 'ascending',
     Descending = 'descending'
 }
+
+export interface LaunchGroup {
+    year: number,
+    launches: Launch[]
+}

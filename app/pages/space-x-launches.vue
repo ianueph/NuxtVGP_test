@@ -57,7 +57,7 @@ const launches = useLaunches(
 </style>
 
 <template>
-	<v-container width="1600px">
+	<v-container>
         <v-row class="mt-10">
             <v-col class="launch-header">
                 <h1 class="my-auto">
@@ -109,21 +109,17 @@ const launches = useLaunches(
                     </td>
                 </tr>
             </template>
-            <template v-slot:item="{ item }">
-                <tr>
-                    <td>{{ item.mission_name }}</td>
-                    <td>{{ item.launch_date_local }}</td>
-                    <td>{{ 
-                        item.launch_site?.site_name ??
-                        item.launch_site?.site_id ??
-                        "N/A"
-                    }}</td>
-                    <td>
-                        <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
-                            {{ item.rocket.rocket_name }}
-                        </nuxt-link>
-                    </td>
-                </tr>
+            <template #item.launch_site.site_name="{item}">
+                {{
+                    item.launch_site?.site_name ??
+                    item.launch_site?.site_id ??
+                    "N/A"
+                }}
+            </template>
+            <template #item.rocket.rocket_name="{item}">
+                <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
+                    {{ item.rocket.rocket_name }}
+                </nuxt-link>
             </template>
         </v-data-table>
     </v-container>

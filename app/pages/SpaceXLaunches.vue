@@ -8,13 +8,23 @@
         </h3>
 
         <v-row class="mx-auto" align="center" justify="start" dense>
-            <v-col cols="auto">
+            <v-col cols="auto" class="mx-3 my-auto">
                 <v-checkbox 
                     label="Filter by year"
-                    v-model="filtered"
+                    v-model="isFilteredByYear"
                 ></v-checkbox>
             </v-col>
-            <v-col cols="12" sm="4" md="3" v-if="filtered">
+            <v-col cols="auto" class="mx-3 my-auto">
+                <v-switch
+                    v-model="order"
+                    :label="`Order: ${order}`"
+                    false-value="ascending"
+                    true-value="descending"
+                    inset
+                    dense
+                ></v-switch>
+            </v-col>
+            <v-col cols="12" sm="auto" md="3" class="mx-3 my-auto" v-if="isFilteredByYear">
                 <v-number-input
                     v-model="selectedYear"
                     :reverse="false"
@@ -25,6 +35,7 @@
                     variant="outlined"
                 ></v-number-input>
             </v-col>
+            
         </v-row>
 
         <v-data-table
@@ -50,10 +61,11 @@
     </v-container>
 </template>
 <script lang="ts" setup>
-import { type Launch } from '~/types/launches'
+import { LaunchOrder, type Launch } from '~/types/launches'
 
 const selectedYear = ref<number>(2000)
-const filtered = ref<boolean>(false)
+const isFilteredByYear = ref<boolean>(false)
+const order = ref<LaunchOrder>(LaunchOrder.Ascending)
 
 const headers = [
     { title: 'Mission Name', align: 'start', key: 'mission_name'},
@@ -86,7 +98,8 @@ const { data } = useAsyncQuery<{
 
 const launches = useLaunches(
     computed(() => data.value?.launches ?? []), 
-    filtered,
+    isFilteredByYear,
+    order,
     selectedYear
     )
 </script>

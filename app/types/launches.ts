@@ -12,3 +12,8 @@ export interface Launch {
         }
         details: string   
 	}
+
+export enum LaunchOrder {
+    Ascending = 'ascending',
+    Descending = 'descending'
+}

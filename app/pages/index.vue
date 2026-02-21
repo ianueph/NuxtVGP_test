@@ -1,121 +1,152 @@
 <template>
-	<v-container>
-		<h2>
-			<v-icon icon="mdi-vuetify" />
-			Starter Template
-		</h2>
-		<h5>Nuxt 3 / Vuetify / Graphql / Pinia</h5>
-		<h3 class="my-5">
-			Example Pinia
-			<v-chip color="blue">useCounter</v-chip>
-		</h3>
-		<v-card class="mx-auto my-12" max-width="374">
-			<v-card-title class="text-blue">Pinia useCounter()</v-card-title>
-			<v-card-item>
-				<v-card-text>
-					<v-chip>count:</v-chip>
-					{{ store.count }}
-				</v-card-text>
-				<v-card-text>
-					<v-chip>doubleCount:</v-chip>
-					{{ store.doubleCount }}
-				</v-card-text>
-			</v-card-item>
+	<v-container class="my-8">
+		<h1 class="mb-6">Ships</h1>
 
-			<v-card-actions><v-btn color="blue" @click="store.increment()">Increment</v-btn></v-card-actions>
-		</v-card>
+		<v-row>
+			<v-col
+			v-for="ship in ships"
+			:key="ship.id"
+			cols="12"
+			sm="6"
+			md="3"
+			>
+			<info-card
+				:title="ship.name"
+				description="N/A"
+				:type="CardEnums.Ship"
+				:info="getShipInfo(ship)"
+			/>
+			</v-col>
+		</v-row>
+	</v-container>
 
-		<h3 class="my-5">
-			Example Vuetify
-			<v-chip color="blue">Card</v-chip>
-		</h3>
-		<v-card class="mx-auto my-12" max-width="374">
-			<template #progress>
-				<v-progress-linear color="deep-purple" height="10" indeterminate />
-			</template>
+	<v-container class="my-8">
+		<h1 class="mb-6">Rockets</h1>
 
-			<v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png" />
+		<v-row>
+			<v-col
+			v-for="rocket in rockets"
+			:key="rocket.id"
+			cols="12"
+			sm="6"
+			md="3"
+			>
+			<info-card
+				:title="rocket.name"
+				:description="rocket.description"
+				:type="CardEnums.Rocket"
+				:info="getRocketInfo(rocket)"
+			/>
+			</v-col>
+		</v-row>
+	</v-container>
 
-			<v-card-title>Cafe Badilico</v-card-title>
+	<v-container class="my-8">
+		<h1 class="mb-6">Launches</h1>
 
-			<v-card-text>
-				<v-row align="center" class="mx-0">
-					<ClientOnly>
-						<v-rating :value="4.5" color="amber" dense half-increments readonly size="14" />
-						<div class="grey--text ms-4">4.5 (413)</div>
-					</ClientOnly>
-				</v-row>
-
-				<div class="my-4 text-subtitle-1">$ • Italian, Cafe</div>
-
-				<div>
-					Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio
-					seating.
-				</div>
-			</v-card-text>
-
-			<v-divider class="mx-4" />
-
-			<v-card-title>Tonight's availability</v-card-title>
-
-			<v-card-text>
-				<v-chip-group v-model="selection" active-class="deep-purple accent-4 white--text" column>
-					<v-chip>5:30PM</v-chip>
-
-					<v-chip>7:30PM</v-chip>
-
-					<v-chip>8:00PM</v-chip>
-
-					<v-chip>9:00PM</v-chip>
-				</v-chip-group>
-			</v-card-text>
-
-			<v-card-actions>
-				<v-btn color="deep-purple lighten-2">Reserve</v-btn>
-			</v-card-actions>
-		</v-card>
-		<h3 class="my-5">
-			Example Vuetify
-			<v-chip color="blue">SimpleTable</v-chip>
-			<v-chip color="orange">Data from spaceX graphql</v-chip>
-		</h3>
-		<p>There are {{ ships?.length || 0 }} ships.</p>
-		<v-table>
-			<thead>
-				<tr>
-					<th class="text-left">Name</th>
-					<th class="text-left">Active</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="ship in ships" :key="ship.name">
-					<td>{{ ship.name }}</td>
-					<td>
-						<v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
-					</td>
-				</tr>
-			</tbody>
-		</v-table>
+		<v-row>
+			<v-col
+			v-for="launch in launches"
+			:key="launch.id"
+			cols="12"
+			sm="6"
+			md="3"
+			>
+			<info-card
+				:title="launch.mission_name"
+				:description="launch.details"
+				:type="CardEnums.Launch"
+				:info="getLaunchInfo(launch)"
+			/>
+			</v-col>
+		</v-row>
 	</v-container>
 </template>
 <script lang="ts" setup>
-const store = useCounter()
-const selection = ref(0)
+import { CardEnums } from '~/types/cards'
+import type { Launch } from '~/types/launches'
+import type { Rocket } from '~/types/rocket'
+import type { Ship } from '~/types/ships'
+
+
+const variables = {
+	limit: 6,
+	offset: 0,
+}
+
 const query = gql`
-	query getShips {
-		ships {
+	query getShips($limit: Int, $offset: Int) {
+		ships(limit: $limit, offset: $offset) {
 			id
 			name
-			active
+			weight_kg
+			home_port
+		}
+		rockets(limit: $limit, offset: $offset) {
+			id
+			name
+			description
+			diameter {
+				meters
+			}
+			height {
+				meters
+			}
+			stages
+			success_rate_pct
+			mass {
+				kg
+			}
+			boosters
+			cost_per_launch
+		}
+		launches(limit: $limit, offset: $offset) {
+			id
+            mission_name
+            launch_date_local
+            launch_site {
+                site_name
+                site_id
+                site_name_long
+            }
+            rocket {
+                rocket_name
+                rocket {
+                    id
+                }
+            }
+            details
 		}
 	}
 `
+
 const { data } = useAsyncQuery<{
-	ships: {
-		id: string
-		name: string
-		active: boolean
-	}[]
-}>(query)
+	ships: Ship[],
+	rockets: Rocket[],
+	launches: Launch[],
+}>(query, variables)
+
 const ships = computed(() => data.value?.ships ?? [])
+const rockets = computed(() => data.value?.rockets ?? [])
+const launches = computed(() => data.value?.launches ?? [])
+
+const getShipInfo = (ship: Ship) => [
+	{ title: 'Home Port', value: ship.home_port ?? 'N/A' },
+	{ title: 'Weight (kg)', value: ship.weight_kg ?? 'N/A' },
+]
+
+const getRocketInfo = (rocket: Rocket) => [
+	{ title: 'Mass (kg)', value: rocket.mass?.kg ?? 'N/A' },
+	{ title: 'Height (m)', value: rocket.height?.meters ?? 'N/A' },
+	{ title: 'Diameter (m)', value: rocket.diameter?.meters ?? 'N/A' },
+	{ title: 'Stages', value: rocket.stages ?? 'N/A' },
+	{ title: 'Boosters', value: rocket.boosters ?? 'N/A' },
+	{ title: 'Success %', value: rocket.success_rate_pct ?? 'N/A' },
+]
+
+const getLaunchInfo = (launch: Launch) => [
+	{ title: 'Launch date', value: launch.launch_date_local ?? 'N/A' },
+	{ title: 'Rocket', value: launch.rocket.rocket_name ?? 'N/A' },
+	{ title: 'Launch Site', value: launch.launch_site?.site_name ?? 'N/A' },
+]
 </script>

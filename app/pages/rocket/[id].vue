@@ -13,18 +13,12 @@
                     <span style="font-size: 2em; padding-left: 1rem;">{{ imperial }}</span>
                 </template>
             </v-switch>
-        <h2>Description:</h2>
-        <p style="max-width: 600px;" class="indent">{{ rocket?.description }}</p>
-        <h3>First Flight Date: </h3>
-        <p class="indent">{{ rocket?.first_flight }}</p>
-        <h3>Height: </h3>
-        <p class="indent">{{ imperial == "Imperial" ? `${rocket?.height.feet} feet` : `${rocket?.height.meters} meters` }}</p>
-        <h3>Diameter: </h3>
-        <p class="indent">{{ imperial == "Imperial"  ? `${rocket?.diameter.feet} feet` : `${rocket?.diameter.meters} meters`}}</p>
-        <h3>Mass: </h3>
-        <p class="indent">{{ imperial == "Imperial"  ? `${rocket?.mass.lb} lb` : `${rocket?.mass.kg} kg` }}</p>
-        <h3>Number of stages: </h3>
-        <p class="indent">{{ rocket?.stages }} stages</p>
+        <info-row title="Description: " :info="rocket?.description"/>
+        <info-row title="First Flight: " :info="rocket?.first_flight"/>
+        <info-row title="Height: " :info="imperial == 'Imperial' ? `${rocket?.height.feet} feet` : `${rocket?.height.meters} meters`"/>
+        <info-row title="Diameter: " :info="imperial == 'Imperial' ? `${rocket?.height.feet} feet` : `${rocket?.height.meters} meters`"/>
+        <info-row title="Mass: " :info="imperial == 'Imperial' ? `${rocket?.diameter.feet} feet` : `${rocket?.diameter.meters} meters`"/>
+        <info-row title="Number of stages: " :info="imperial == 'Imperial' ? `${rocket?.mass.lb} pounds` : `${rocket?.mass.kg} kilograms`"/>
     </v-container>
 </template>
 
@@ -38,9 +32,6 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 8em
-}
-.indent {
-  padding-left: 2rem; 
 }
 </style>
 

@@ -1,81 +1,3 @@
-<template>
-	<v-container>
-        <h1 class="my-auto">
-            Space X Launches
-        </h1>
-        <h3 class="my-5">
-            Selected year, returned {{ launches.length }} rows
-        </h3>
-
-        <v-row class="mx-auto" align="center" justify="start" dense>
-            <v-col cols="auto" class="mx-3 my-auto">
-                <v-checkbox 
-                    label="Filter by year"
-                    v-model="isFilteredByYear"
-                ></v-checkbox>
-            </v-col>
-            <v-col cols="auto" class="mx-3 my-auto">
-                <v-switch
-                    v-model="order"
-                    :label="`Order: ${order}`"
-                    false-value="ascending"
-                    true-value="descending"
-                    inset
-                    dense
-                ></v-switch>
-            </v-col>
-            <v-col cols="12" sm="auto" md="3" class="mx-3 my-auto" v-if="isFilteredByYear">
-                <v-number-input
-                    v-model="selectedYear"
-                    :reverse="false"
-                    controlVariant="default"
-                    label=""
-                    :hideInput="false"
-                    :inset="false"
-                    variant="outlined"
-                ></v-number-input>
-            </v-col>
-            
-        </v-row>
-
-        <v-data-table
-        :headers="headers"
-        :items="launches"
-        :items-per-page="25"
-        height="94vh"
-        fixed-header
-        fixed-footer
-        density="compact"
-        item-value="id"
-        show-expand
-        expand-on-click
-        >  
-            <template v-slot:expanded-row="{columns, item}">
-                <tr>
-                    <td :colspan="columns.length+1" class="py-2">
-                        {{item.details}}
-                    </td>
-                </tr>
-            </template>
-            <template v-slot:item="{ item }">
-                <tr>
-                    <td>{{ item.mission_name }}</td>
-                    <td>{{ item.launch_date_local }}</td>
-                    <td>{{ 
-                        item.launch_site?.site_name ??
-                        item.launch_site?.site_id ??
-                        "N/A"
-                    }}</td>
-                    <td>
-                        <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
-                            {{ item.rocket.rocket_name }}
-                        </nuxt-link>
-                    </td>
-                </tr>
-            </template>
-        </v-data-table>
-    </v-container>
-</template>
 <script lang="ts" setup>
 import { LaunchOrder, type Launch } from '~/types/launches'
 
@@ -122,3 +44,87 @@ const launches = useLaunches(
     selectedYear
     )
 </script>
+
+
+<style scoped>
+.launch-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 200px;
+  margin-bottom: 30px;
+}
+</style>
+
+<template>
+	<v-container width="1600px">
+        <v-row class="mt-10">
+            <v-col class="launch-header">
+                <h1 class="my-auto">
+                    Space X Launches
+                </h1>
+                <h3 class="my-5">
+                    We returned {{ launches.length }} rows.
+                </h3>
+                <v-row align="center" justify="start" dense>
+                    <v-col cols="auto" class="mx-3 my-auto">
+                        <v-checkbox 
+                            label="Filter by year"
+                            v-model="isFilteredByYear"
+                        ></v-checkbox>
+                    </v-col>
+                    <v-col cols="auto" class="mx-3 my-auto">
+                        <v-switch
+                            v-model="order"
+                            :label="`Order: ${order}`"
+                            false-value="ascending"
+                            true-value="descending"
+                            inset
+                            dense
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+            </v-col>
+            <v-col>
+                <launch-timeline v-model="selectedYear" v-if="isFilteredByYear"/>
+            </v-col>
+        </v-row>
+
+        <v-data-table
+            :headers="headers"
+            :items="launches"
+            :items-per-page="25"
+            height="94vh"
+            fixed-header
+            fixed-footer
+            density="compact"
+            item-value="id"
+            show-expand
+            expand-on-click
+        >  
+            <template v-slot:expanded-row="{columns, item}">
+                <tr>
+                    <td :colspan="columns.length+1" class="py-2">
+                        {{item.details}}
+                    </td>
+                </tr>
+            </template>
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td>{{ item.mission_name }}</td>
+                    <td>{{ item.launch_date_local }}</td>
+                    <td>{{ 
+                        item.launch_site?.site_name ??
+                        item.launch_site?.site_id ??
+                        "N/A"
+                    }}</td>
+                    <td>
+                        <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
+                            {{ item.rocket.rocket_name }}
+                        </nuxt-link>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
+    </v-container>
+</template>

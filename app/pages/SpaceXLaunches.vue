@@ -1,21 +1,32 @@
 <template>
 	<v-container>
-        <h1>
+        <h1 class="my-auto">
             Space X Launches
         </h1>
-        <h3>
-            Selected year
+        <h3 class="my-5">
+            Selected year, returned {{ launches.length }} rows
         </h3>
-        <v-number-input
-            v-model="selectedYear"
-            :reverse="false"
-            controlVariant="default"
-            label=""
-            :hideInput="false"
-            :inset="false"
-            variant="outlined"
-            width="400"
-        ></v-number-input>
+
+        <v-row class="mx-auto" align="center" justify="start" dense>
+            <v-col cols="auto">
+                <v-checkbox 
+                    label="Filter by year"
+                    v-model="filtered"
+                ></v-checkbox>
+            </v-col>
+            <v-col cols="12" sm="4" md="3" v-if="filtered">
+                <v-number-input
+                    v-model="selectedYear"
+                    :reverse="false"
+                    controlVariant="default"
+                    label=""
+                    :hideInput="false"
+                    :inset="false"
+                    variant="outlined"
+                ></v-number-input>
+            </v-col>
+        </v-row>
+
         <v-data-table
         :headers="headers"
         :items="launches"
@@ -42,6 +53,7 @@
 import { type Launch } from '~/types/launches'
 
 const selectedYear = ref<number>(2000)
+const filtered = ref<boolean>(false)
 
 const headers = [
     { title: 'Mission Name', align: 'start', key: 'mission_name'},
@@ -72,8 +84,9 @@ const { data } = useAsyncQuery<{
 	launches: Launch[]
 }>(query)
 
-const launches = useFilteredLaunches(
+const launches = useLaunches(
     computed(() => data.value?.launches ?? []), 
+    filtered,
     selectedYear
     )
 </script>

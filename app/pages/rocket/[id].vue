@@ -32,7 +32,7 @@
 .rocket-details > h1 {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-size: 8em
+  font-size: 6em
 }
 </style>
 

@@ -51,7 +51,7 @@ const getRocketInfo = (rocket: Rocket | undefined) => [
     <v-container class="ma-3 mx-auto">
 		<v-row align="center" justify="space-between" dense>
             <v-col cols="auto">
-                <h1 class="mb-0">Rockets</h1>
+                <h1 class="mb-0">Favourite Rockets</h1>
             </v-col>
 
             <v-col cols="auto">

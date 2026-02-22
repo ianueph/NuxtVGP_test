@@ -11,6 +11,7 @@ const headers = [
     { title: 'Launch Date, Local', align: 'start', key: 'launch_date_local'},
     { title: 'Launch Site', align: 'start', key: 'launch_site.site_name'},
     { title: 'Rocket Name', align: 'start', key: 'rocket.rocket_name'},
+    { title: 'Fav. Rocket', align: 'start', key: 'fav_rocket'}
 ] as const
 
 const query = gql`
@@ -60,6 +61,7 @@ const launches = useLaunches(
 <template>
 	<v-container>
         <v-row class="mt-10">
+            
             <v-col class="launch-header">
                 <h1 class="my-auto">
                     Space X Launches
@@ -67,28 +69,30 @@ const launches = useLaunches(
                 <h3 class="my-5">
                     We returned {{ launches.length }} rows.
                 </h3>
-                <v-row align="center" justify="start" dense>
-                    <v-col cols="auto" class="mx-3 my-auto">
-                        <v-checkbox 
-                            label="Filter by year"
-                            v-model="isFilteredByYear"
-                        ></v-checkbox>
-                    </v-col>
-                    <v-col cols="auto" class="mx-3 my-auto">
-                        <v-switch
-                            v-model="order"
-                            :label="`Order: ${order}`"
-                            false-value="ascending"
-                            true-value="descending"
-                            inset
-                            dense
-                        ></v-switch>
-                    </v-col>
-                </v-row>
+                
             </v-col>
-              
             <v-col>
                 <launch-timeline v-model="selectedYear" v-if="isFilteredByYear"/>
+            </v-col>
+            
+            
+        </v-row>
+        <v-row align="center" justify="start" dense>
+            <v-col cols="auto" class="mx-3 my-auto">
+                <v-checkbox 
+                    label="Filter by year"
+                    v-model="isFilteredByYear"
+                ></v-checkbox>
+            </v-col>
+            <v-col cols="auto" class="mx-3 my-auto">
+                <v-switch
+                    v-model="order"
+                    :label="`Order: ${order}`"
+                    false-value="ascending"
+                    true-value="descending"
+                    inset
+                    dense
+                ></v-switch>
             </v-col>
         </v-row>
         
@@ -118,14 +122,15 @@ const launches = useLaunches(
                 }}
             </template>
             <template #item.rocket.rocket_name="{item}">
-                <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center justify-space-between" style="min-width: 400;">
                     <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
                         {{ item.rocket.rocket_name }}
                     </nuxt-link>
-                    <favourite-button :id="item.rocket.rocket.id" :type="FavouriteTypes.ROCKET">
-                        
-                    </favourite-button>
+                    
                 </div>
+            </template>
+            <template #item.fav_rocket="{item}">
+                <favourite-button :id="item.rocket.rocket.id" :type="FavouriteTypes.ROCKET"/>
             </template>
         </v-data-table>
     </v-container>

@@ -60,6 +60,8 @@
     justify-content: center;
     margin-top: 20px;
     max-width: 700px;
+    max-height: 200px;
+    min-height: 175px;
 }
 
 .bar-container {

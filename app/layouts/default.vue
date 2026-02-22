@@ -59,6 +59,10 @@ const items = [
 	{
 		title: 'Launches',
 		href: '/space-x-launches'
+	},
+	{
+		title: 'Favourites',
+		href: '/favourites/'
 	}
 ]
 

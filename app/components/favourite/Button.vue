@@ -1,6 +1,6 @@
 <template>
     <v-btn @click="toggleFavouriteSafe()">
-        <v-icon icon="mdi-heart-outline" v-if="isFavourite"></v-icon> 
+        <v-icon icon="mdi-heart-outline" v-if="!isFavourite"></v-icon> 
         <v-icon icon="mdi-heart" v-else></v-icon>
         <v-icon icon="mdi-rocket-launch"></v-icon> 
     </v-btn>

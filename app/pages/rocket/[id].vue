@@ -13,8 +13,9 @@
                     <span style="font-size: 2em; padding-left: 1rem;">{{ imperial }}</span>
                 </template>
             </v-switch>
-        <info-row title="Description: " :info="rocket?.description"/>
-        <info-row title="First Flight: " :info="rocket?.first_flight"/>
+            <favourite-button :type="FavouriteTypes.ROCKET" :id="rocket?.id"></favourite-button>
+        <info-row title="Description: " :info="rocket?.description ?? 'n/a'"/>
+        <info-row title="First Flight: " :info="rocket?.first_flight ?? 'n/a'"/>
         <info-row title="Height: " :info="imperial == 'Imperial' ? `${rocket?.height.feet} feet` : `${rocket?.height.meters} meters`"/>
         <info-row title="Diameter: " :info="imperial == 'Imperial' ? `${rocket?.height.feet} feet` : `${rocket?.height.meters} meters`"/>
         <info-row title="Mass: " :info="imperial == 'Imperial' ? `${rocket?.diameter.feet} feet` : `${rocket?.diameter.meters} meters`"/>
@@ -36,6 +37,7 @@
 </style>
 
 <script lang="ts" setup>
+import { FavouriteTypes } from '~/types/favourites';
 import type { Rocket } from '~/types/rocket';
 const route = useRoute();
 const imperial = ref<string>("Metric"); // false = metric, true = imperial

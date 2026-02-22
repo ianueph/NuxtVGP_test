@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { FavouriteTypes } from '~/types/favourites'
 import { LaunchOrder, type Launch } from '~/types/launches'
 
 const selectedYear = ref<number>(2000)
@@ -85,11 +86,12 @@ const launches = useLaunches(
                     </v-col>
                 </v-row>
             </v-col>
+              
             <v-col>
                 <launch-timeline v-model="selectedYear" v-if="isFilteredByYear"/>
             </v-col>
         </v-row>
-
+        
         <v-data-table
             :headers="headers"
             :items="launches"
@@ -100,7 +102,6 @@ const launches = useLaunches(
             density="compact"
             item-value="id"
             show-expand
-            expand-on-click
         >  
             <template v-slot:expanded-row="{columns, item}">
                 <tr>
@@ -117,9 +118,14 @@ const launches = useLaunches(
                 }}
             </template>
             <template #item.rocket.rocket_name="{item}">
-                <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
-                    {{ item.rocket.rocket_name }}
-                </nuxt-link>
+                <div class="d-flex align-center justify-space-between">
+                    <nuxt-link :to="{ name: 'rocket-id', params: { id: item.rocket.rocket.id}}">
+                        {{ item.rocket.rocket_name }}
+                    </nuxt-link>
+                    <favourite-button :id="item.rocket.rocket.id" :type="FavouriteTypes.ROCKET">
+                        
+                    </favourite-button>
+                </div>
             </template>
         </v-data-table>
     </v-container>

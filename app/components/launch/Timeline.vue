@@ -2,8 +2,6 @@
     import { useLaunchGrouping } from '~/composables/useLaunchGrouping';
     import { LaunchOrder, type Launch, type LaunchGroup } from '~/types/launches';
 
-
-
     function getBiggestLaunchGroup(groups: LaunchGroup[]): LaunchGroup | null {
         return groups.reduce<LaunchGroup | null>((maxGroup, group) => {
             if (!maxGroup) return group;
